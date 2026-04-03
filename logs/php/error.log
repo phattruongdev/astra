@@ -1,0 +1,4 @@
+[03-Apr-2026 08:58:18 UTC] PHP Warning:  Undefined array key "name" in C:\Users\TanPhat\Local Sites\astra\app\public\wp-content\plugins\woocommerce\includes\class-wc-install.php on line 1163
+[03-Apr-2026 08:58:18 UTC] PHP Warning:  Undefined array key "title" in C:\Users\TanPhat\Local Sites\astra\app\public\wp-content\plugins\woocommerce\includes\class-wc-install.php on line 1165
+[03-Apr-2026 08:58:18 UTC] PHP Warning:  Undefined array key "name" in C:\Users\TanPhat\Local Sites\astra\app\public\wp-content\plugins\woocommerce\includes\class-wc-install.php on line 1163
+[03-Apr-2026 08:58:18 UTC] PHP Warning:  Undefined array key "title" in C:\Users\TanPhat\Local Sites\astra\app\public\wp-content\plugins\woocommerce\includes\class-wc-install.php on line 1165
