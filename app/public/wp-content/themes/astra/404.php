@@ -27,6 +27,7 @@ get_header(); ?>
 		<?php astra_404_content_template(); ?>		
 
 		<?php astra_primary_content_bottom(); ?>
+		<p> This is 404 page</p>
 
 	</div><!-- #primary -->
 
