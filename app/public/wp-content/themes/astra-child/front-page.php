@@ -1,17 +1,19 @@
 <?php
+
 /**
  * Front page template for the AstraLand real estate portal mockup.
  *
  * @package Astra_Child
  */
+
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
 <head>
-    <meta charset="<?php bloginfo( 'charset' ); ?>">
+    <meta charset="<?php bloginfo('charset'); ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?php wp_head(); ?>
 </head>
-<body <?php body_class( 'astraland-homepage' ); ?>>
+<body <?php body_class('astraland-homepage'); ?>>
 <?php wp_body_open(); ?>
 
 <header class="al-header" data-header>
@@ -21,7 +23,7 @@
                 <span class="al-brand__mark">A</span>
                 <span class="al-brand__text">AstraLand</span>
             </div>
-            <nav class="al-nav" aria-label="Danh mục chính">
+            <nav class="al-nav" aria-label="Danh mục chính" data-nav>
                 <button class="al-nav__item is-active" data-mega="buy">Mua bán nhà đất</button>
                 <button class="al-nav__item" data-mega="rent">Cho thuê nhà đất</button>
                 <button class="al-nav__item" data-mega="transfer">Sang nhượng</button>
@@ -31,8 +33,8 @@
             </nav>
             <div class="al-actions">
                 <button class="al-icon-btn" aria-label="Thông báo"><i data-lucide="bell"></i></button>
-                <button class="al-ghost">Đăng nhập</button>
-                <button class="al-primary"><i data-lucide="plus"></i><span>Đăng tin</span></button>
+                <button class="al-ghost" data-auth-open>Đăng nhập</button>
+                <button class="al-primary" data-post-open><i data-lucide="plus"></i><span>Đăng tin</span></button>
                 <button class="al-menu-btn" data-menu aria-label="Mở menu"><i data-lucide="menu"></i></button>
             </div>
         </div>
@@ -71,7 +73,7 @@
         <div class="al-shell al-hero__content">
             <p class="al-kicker">Cổng thông tin bất động sản xác thực 4.0</p>
             <h1>Tìm nhà đất nhanh hơn với dữ liệu thị trường rõ ràng</h1>
-            <form class="al-search" action="<?php echo esc_url( home_url( '/' ) ); ?>" method="get">
+            <form class="al-search" action="<?php echo esc_url(home_url('/')); ?>" method="get">
                 <div class="al-search__tabs" role="tablist" aria-label="Loại giao dịch">
                     <button type="button" class="is-selected">Mua bán</button>
                     <button type="button">Cho thuê</button>
@@ -108,34 +110,18 @@
         <div class="al-market__headline">
             <i data-lucide="trending-up"></i>
             <span>Thị trường bất động sản hôm nay</span>
-            <strong>14/05/2026</strong>
+            <strong data-stat-date>Đang tải</strong>
         </div>
         <div class="al-stat">
             <span>Tin đăng đang hiệu lực</span>
-            <strong>41.420</strong>
+            <strong data-stat-active>0</strong>
         </div>
         <div class="al-stat">
             <span>Tin đăng hôm nay</span>
-            <strong>2.048</strong>
+            <strong data-stat-today>0</strong>
         </div>
-        <div class="al-bars">
-            <?php
-            $bars = array(
-                'Nhà riêng' => 708,
-                'Căn hộ'    => 232,
-                'Đất'       => 169,
-                'Đất nền'   => 141,
-                'Biệt thự'  => 139,
-            );
-            foreach ( $bars as $label => $value ) :
-                $height = max( 22, min( 100, (int) ( $value / 7 ) ) );
-                ?>
-                <div class="al-bar" style="--h: <?php echo esc_attr( $height ); ?>%">
-                    <strong><?php echo esc_html( $value ); ?></strong>
-                    <span></span>
-                    <em><?php echo esc_html( $label ); ?></em>
-                </div>
-            <?php endforeach; ?>
+        <div class="al-chart-card">
+            <canvas id="alMarketChart" aria-label="Biểu đồ thống kê tin đăng theo danh mục"></canvas>
         </div>
     </section>
 
@@ -156,14 +142,14 @@
                 array( 'Đất nền khu dân cư hiện hữu, sổ riêng từng nền', 'TP. Biên Hòa', '3,59 tỷ', '70 m²', '5 phút trước' ),
                 array( 'Căn góc chung cư gần metro, ban công thoáng', 'Q. 7', '4,59 tỷ', '96 m²', '8 phút trước' ),
             );
-            foreach ( $hot_items as $item ) :
+            foreach ($hot_items as $item) :
                 ?>
                 <a href="#" class="al-hot">
-                    <span><?php echo esc_html( $item[0] ); ?></span>
-                    <small><?php echo esc_html( $item[1] ); ?></small>
-                    <strong><?php echo esc_html( $item[2] ); ?></strong>
-                    <em><?php echo esc_html( $item[3] ); ?></em>
-                    <time><?php echo esc_html( $item[4] ); ?></time>
+                    <span><?php echo esc_html($item[0]); ?></span>
+                    <small><?php echo esc_html($item[1]); ?></small>
+                    <strong><?php echo esc_html($item[2]); ?></strong>
+                    <em><?php echo esc_html($item[3]); ?></em>
+                    <time><?php echo esc_html($item[4]); ?></time>
                 </a>
             <?php endforeach; ?>
         </div>
@@ -191,23 +177,23 @@
                 array( 'https://images.unsplash.com/photo-1605146769289-440113cc3d00?auto=format&fit=crop&w=900&q=80', 'Shophouse trục chính khu đô thị, khai thác ngay', 'TP. Thủ Đức, TP. Hồ Chí Minh', '21,5 tỷ', '108 m²', '3 tầng', 'Mặt tiền', 'Hot' ),
                 array( 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80', 'Penthouse thông tầng, sân vườn riêng', 'Q. Tây Hồ, Hà Nội', '60 tỷ', '500 m²', '6 PN', '5 WC', 'Cao cấp' ),
             );
-            foreach ( $listings as $listing ) :
+            foreach ($listings as $listing) :
                 ?>
                 <article class="al-card">
-                    <div class="al-card__image" style="background-image: url('<?php echo esc_url( $listing[0] ); ?>')">
-                        <span><?php echo esc_html( $listing[7] ); ?></span>
+                    <div class="al-card__image" style="background-image: url('<?php echo esc_url($listing[0]); ?>')">
+                        <span><?php echo esc_html($listing[7]); ?></span>
                         <button aria-label="Lưu tin"><i data-lucide="heart"></i></button>
                     </div>
                     <div class="al-card__body">
-                        <h3><?php echo esc_html( $listing[1] ); ?></h3>
-                        <p><i data-lucide="map-pin"></i><?php echo esc_html( $listing[2] ); ?></p>
+                        <h3><?php echo esc_html($listing[1]); ?></h3>
+                        <p><i data-lucide="map-pin"></i><?php echo esc_html($listing[2]); ?></p>
                         <div class="al-card__meta">
-                            <strong><?php echo esc_html( $listing[3] ); ?></strong>
-                            <span><?php echo esc_html( $listing[4] ); ?></span>
+                            <strong><?php echo esc_html($listing[3]); ?></strong>
+                            <span><?php echo esc_html($listing[4]); ?></span>
                         </div>
                         <div class="al-card__chips">
-                            <span><?php echo esc_html( $listing[5] ); ?></span>
-                            <span><?php echo esc_html( $listing[6] ); ?></span>
+                            <span><?php echo esc_html($listing[5]); ?></span>
+                            <span><?php echo esc_html($listing[6]); ?></span>
                         </div>
                     </div>
                 </article>
@@ -250,7 +236,7 @@
                 <p>Môi giới uy tín</p>
                 <h2>Đội ngũ có hồ sơ rõ ràng</h2>
             </div>
-            <button class="al-primary"><i data-lucide="user-plus"></i><span>Tham gia</span></button>
+            <button class="al-primary" data-auth-open><i data-lucide="user-plus"></i><span>Tham gia</span></button>
         </div>
         <div class="al-agent-grid">
             <?php
@@ -261,12 +247,12 @@
                 array( 'VB', 'Việt BT', '224 tin đăng' ),
                 array( 'LH', 'Lê Hưng', '174 tin đăng' ),
             );
-            foreach ( $agents as $agent ) :
+            foreach ($agents as $agent) :
                 ?>
                 <article class="al-agent">
-                    <div><?php echo esc_html( $agent[0] ); ?></div>
-                    <h3><?php echo esc_html( $agent[1] ); ?></h3>
-                    <p><?php echo esc_html( $agent[2] ); ?></p>
+                    <div><?php echo esc_html($agent[0]); ?></div>
+                    <h3><?php echo esc_html($agent[1]); ?></h3>
+                    <p><?php echo esc_html($agent[2]); ?></p>
                     <span><i data-lucide="badge-check"></i>Đã xác thực</span>
                 </article>
             <?php endforeach; ?>
@@ -333,6 +319,57 @@
         </div>
     </div>
 </footer>
+
+<div class="al-modal" data-modal="auth" aria-hidden="true">
+    <div class="al-modal__backdrop" data-modal-close></div>
+    <section class="al-modal__panel" role="dialog" aria-modal="true" aria-labelledby="al-auth-title">
+        <button class="al-modal__close" data-modal-close aria-label="Đóng"><i data-lucide="x"></i></button>
+        <div class="al-modal__tabs">
+            <button class="is-selected" data-auth-tab="login">Đăng nhập</button>
+            <button data-auth-tab="register">Đăng ký</button>
+        </div>
+        <form class="al-form is-active" data-auth-form="login">
+            <h2 id="al-auth-title">Đăng nhập tài khoản</h2>
+            <label>Email hoặc tên đăng nhập<input name="email" type="text" autocomplete="username" required></label>
+            <label>Mật khẩu<input name="password" type="password" autocomplete="current-password" required></label>
+            <button class="al-primary" type="submit">Đăng nhập</button>
+            <p class="al-form__message" data-form-message></p>
+        </form>
+        <form class="al-form" data-auth-form="register">
+            <h2>Tạo tài khoản mới</h2>
+            <label>Họ tên<input name="name" type="text" autocomplete="name" required></label>
+            <label>Email<input name="email" type="email" autocomplete="email" required></label>
+            <label>Mật khẩu<input name="password" type="password" autocomplete="new-password" minlength="6" required></label>
+            <button class="al-primary" type="submit">Đăng ký</button>
+            <p class="al-form__message" data-form-message></p>
+        </form>
+    </section>
+</div>
+
+<div class="al-modal" data-modal="post" aria-hidden="true">
+    <div class="al-modal__backdrop" data-modal-close></div>
+    <section class="al-modal__panel al-modal__panel--wide" role="dialog" aria-modal="true" aria-labelledby="al-post-title">
+        <button class="al-modal__close" data-modal-close aria-label="Đóng"><i data-lucide="x"></i></button>
+        <form class="al-form al-form--grid is-active" data-post-form>
+            <h2 id="al-post-title">Đăng tin bất động sản</h2>
+            <label class="al-form__full">Tiêu đề tin<input name="title" type="text" placeholder="Nhà phố 4 tầng, hẻm ô tô, sổ riêng" required></label>
+            <label>Loại nhà đất
+                <select name="property_type">
+                    <option>Nhà riêng</option>
+                    <option>Căn hộ chung cư</option>
+                    <option>Đất nền</option>
+                    <option>Văn phòng</option>
+                </select>
+            </label>
+            <label>Giá<input name="price" type="text" placeholder="4,5 tỷ" required></label>
+            <label>Diện tích<input name="area" type="text" placeholder="72 m²" required></label>
+            <label>Địa chỉ<input name="address" type="text" placeholder="Quận 7, TP. Hồ Chí Minh" required></label>
+            <label class="al-form__full">Mô tả<textarea name="description" rows="5" placeholder="Mô tả pháp lý, tiện ích, hướng nhà, tình trạng nội thất"></textarea></label>
+            <button class="al-primary al-form__full" type="submit">Gửi tin</button>
+            <p class="al-form__message al-form__full" data-form-message></p>
+        </form>
+    </section>
+</div>
 
 <?php wp_footer(); ?>
 </body>

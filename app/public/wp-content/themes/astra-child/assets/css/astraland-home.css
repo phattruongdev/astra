@@ -43,6 +43,10 @@ body.astraland-homepage {
   backdrop-filter: blur(18px);
 }
 
+.al-modal-lock {
+  overflow: hidden;
+}
+
 .admin-bar .al-header {
   top: 32px;
 }
@@ -170,8 +174,25 @@ body.astraland-homepage {
 }
 
 .al-mega {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 72px;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-8px);
+  pointer-events: none;
   border-top: 1px solid var(--al-line);
   background: var(--al-white);
+  box-shadow: 0 18px 34px rgba(20, 34, 29, 0.1);
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+}
+
+.al-header.is-mega-open .al-mega {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
 }
 
 .al-mega__grid {
@@ -411,40 +432,10 @@ body.astraland-homepage {
   font-size: 30px;
 }
 
-.al-bars {
+.al-chart-card {
   min-height: 148px;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 10px;
-  align-items: end;
-  padding: 12px 6px 4px;
-}
-
-.al-bar {
-  height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: 6px;
-  justify-items: center;
-  color: var(--al-muted);
-  font-size: 11px;
-  text-align: center;
-}
-
-.al-bar strong {
-  color: var(--al-ink);
-}
-
-.al-bar span {
-  width: 28px;
-  height: var(--h);
-  align-self: end;
-  border-radius: 6px 6px 2px 2px;
-  background: linear-gradient(180deg, #39c98a, var(--al-green));
-}
-
-.al-bar em {
-  font-style: normal;
+  height: 168px;
+  padding: 10px 4px 0;
 }
 
 .al-ticker,
@@ -535,6 +526,14 @@ body.astraland-homepage {
   border-radius: 8px;
   background: var(--al-white);
   box-shadow: 0 8px 26px rgba(20, 34, 29, 0.06);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.al-card:hover,
+.al-tools article:hover,
+.al-agent:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 34px rgba(20, 34, 29, 0.12);
 }
 
 .al-card__image {
@@ -717,6 +716,7 @@ body.astraland-homepage {
   border: 1px solid var(--al-line);
   border-radius: 8px;
   background: var(--al-white);
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .al-agent > div {
@@ -771,6 +771,7 @@ body.astraland-homepage {
   border-radius: 8px;
   background: var(--al-white);
   border: 1px solid var(--al-line);
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .al-tools svg {
@@ -823,6 +824,165 @@ body.astraland-homepage {
   color: rgba(255, 255, 255, 0.72);
 }
 
+.al-reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.al-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.al-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease, visibility 180ms ease;
+}
+
+.al-modal.is-open {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.al-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(13, 28, 22, 0.62);
+  backdrop-filter: blur(6px);
+}
+
+.al-modal__panel {
+  position: relative;
+  width: min(460px, 100%);
+  max-height: calc(100vh - 36px);
+  overflow: auto;
+  padding: 22px;
+  border-radius: 10px;
+  background: var(--al-white);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.26);
+  transform: translateY(16px) scale(0.98);
+  transition: transform 200ms ease;
+}
+
+.al-modal.is-open .al-modal__panel {
+  transform: translateY(0) scale(1);
+}
+
+.al-modal__panel--wide {
+  width: min(760px, 100%);
+}
+
+.al-modal__close {
+  position: absolute;
+  right: 14px;
+  top: 14px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--al-line);
+  border-radius: 8px;
+  background: var(--al-white);
+  cursor: pointer;
+}
+
+.al-modal__tabs {
+  display: inline-flex;
+  padding: 4px;
+  margin-bottom: 18px;
+  border: 1px solid var(--al-line);
+  border-radius: 8px;
+  background: #f7faf8;
+}
+
+.al-modal__tabs button {
+  min-height: 34px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--al-muted);
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.al-modal__tabs button.is-selected {
+  background: var(--al-white);
+  color: var(--al-green-dark);
+  box-shadow: 0 2px 10px rgba(20, 34, 29, 0.08);
+}
+
+.al-form {
+  display: none;
+  gap: 14px;
+}
+
+.al-form.is-active {
+  display: grid;
+}
+
+.al-form h2 {
+  margin: 0 42px 4px 0;
+  color: var(--al-ink);
+  font-size: 24px;
+  line-height: 1.18;
+}
+
+.al-form label {
+  display: grid;
+  gap: 7px;
+  color: var(--al-muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.al-form input,
+.al-form select,
+.al-form textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border: 1px solid var(--al-line);
+  border-radius: 8px;
+  background: #fbfdfc;
+  color: var(--al-ink);
+  font: inherit;
+  font-weight: 650;
+}
+
+.al-form textarea {
+  resize: vertical;
+}
+
+.al-form--grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.al-form__full {
+  grid-column: 1 / -1;
+}
+
+.al-form__message {
+  min-height: 20px;
+  margin: 0;
+  color: var(--al-green-dark);
+  font-weight: 750;
+}
+
+.al-form__message.is-error {
+  color: #b42318;
+}
+
 @media (max-width: 1024px) {
   .al-nav {
     display: none;
@@ -834,7 +994,9 @@ body.astraland-homepage {
 
   .al-header.is-open .al-nav {
     position: absolute;
-    inset: 72px 16px auto;
+    top: 72px;
+    left: 16px;
+    right: 16px;
     display: grid;
     padding: 12px;
     border: 1px solid var(--al-line);
@@ -843,11 +1005,21 @@ body.astraland-homepage {
     box-shadow: var(--al-shadow);
   }
 
+  .al-header.is-open .al-nav__item,
+  .al-header.is-open .al-nav__link {
+    width: 100%;
+    text-align: left;
+  }
+
+  .al-header.is-mega-open .al-mega {
+    display: none;
+  }
+
   .al-market {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .al-bars {
+  .al-chart-card {
     grid-column: 1 / -1;
   }
 
@@ -928,9 +1100,8 @@ body.astraland-homepage {
     padding: 12px;
   }
 
-  .al-bars {
-    overflow-x: auto;
-    grid-template-columns: repeat(5, minmax(74px, 1fr));
+  .al-chart-card {
+    height: 220px;
   }
 
   .al-section-title {
@@ -960,5 +1131,21 @@ body.astraland-homepage {
   .al-agent-grid,
   .al-footer__grid {
     grid-template-columns: 1fr;
+  }
+
+  .al-form--grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .al-reveal,
+  .al-card,
+  .al-agent,
+  .al-tools article,
+  .al-modal,
+  .al-modal__panel,
+  .al-mega {
+    transition: none;
   }
 }

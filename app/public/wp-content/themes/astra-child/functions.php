@@ -1,12 +1,14 @@
 <?php
+
 /**
  * Astra Child Theme functions and definitions.
  */
 
-function astra_child_enqueue_styles() {
-    wp_enqueue_style( 'astra-child-theme-css', get_stylesheet_directory_uri() . '/style.css', array( 'astra-theme-css' ), '1.0.0', 'all' );
+function astra_child_enqueue_styles()
+{
+    wp_enqueue_style('astra-child-theme-css', get_stylesheet_directory_uri() . '/style.css', array( 'astra-theme-css' ), '1.0.0', 'all');
 
-    if ( is_front_page() ) {
+    if (is_front_page()) {
         wp_enqueue_style(
             'astraland-home',
             get_stylesheet_directory_uri() . '/assets/css/astraland-home.css',
@@ -33,4 +35,4 @@ function astra_child_enqueue_styles() {
     }
 }
 
-add_action( 'wp_enqueue_scripts', 'astra_child_enqueue_styles', 15 );
+add_action('wp_enqueue_scripts', 'astra_child_enqueue_styles', 15);
