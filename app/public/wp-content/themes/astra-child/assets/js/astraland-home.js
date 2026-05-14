@@ -151,7 +151,7 @@
   function initForms() {
     var loginForm = document.querySelector('[data-auth-form="login"]');
     var registerForm = document.querySelector('[data-auth-form="register"]');
-    var postForm = document.querySelector('[data-post-form]');
+    var postForms = document.querySelectorAll('[data-post-form]');
 
     if (loginForm) {
       loginForm.addEventListener('submit', function (event) {
@@ -183,7 +183,7 @@
       });
     }
 
-    if (postForm) {
+    postForms.forEach(function (postForm) {
       postForm.addEventListener('submit', function (event) {
         event.preventDefault();
         setMessage(postForm, 'Đang gửi tin...');
@@ -192,11 +192,100 @@
             postForm.reset();
             setMessage(postForm, data.message);
           })
-          .catch(function (error) {
-            setMessage(postForm, error.message, true);
-          });
+        .catch(function (error) {
+          setMessage(postForm, error.message, true);
+        });
+      });
+    });
+  }
+
+  function initSubmitSteps() {
+    var form = document.querySelector('[data-step-form]');
+    if (!form) return;
+
+    var step = 1;
+    var steps = form.querySelectorAll('[data-step]');
+    var dots = document.querySelectorAll('[data-step-dot]');
+    var prev = form.querySelector('[data-step-prev]');
+    var next = form.querySelector('[data-step-next]');
+    var submit = form.querySelector('.is-submit');
+
+    function updateStep(nextStep) {
+      step = Math.max(1, Math.min(steps.length, nextStep));
+      steps.forEach(function (section) {
+        section.classList.toggle('is-active', Number(section.getAttribute('data-step')) === step);
+      });
+      dots.forEach(function (dot) {
+        dot.classList.toggle('is-active', Number(dot.getAttribute('data-step-dot')) === step);
+      });
+      if (prev) prev.disabled = step === 1;
+      if (next) next.style.display = step === steps.length ? 'none' : 'inline-flex';
+      if (submit) submit.style.display = step === steps.length ? 'inline-flex' : 'none';
+    }
+
+    function currentStepIsValid() {
+      var active = form.querySelector('[data-step="' + step + '"]');
+      var fields = active ? active.querySelectorAll('input, select, textarea') : [];
+      for (var index = 0; index < fields.length; index += 1) {
+        if (!fields[index].checkValidity()) {
+          fields[index].reportValidity();
+          return false;
+        }
+      }
+      return true;
+    }
+
+    if (prev) {
+      prev.addEventListener('click', function () {
+        updateStep(step - 1);
       });
     }
+
+    if (next) {
+      next.addEventListener('click', function () {
+        if (currentStepIsValid()) {
+          updateStep(step + 1);
+        }
+      });
+    }
+
+    dots.forEach(function (dot) {
+      dot.addEventListener('click', function () {
+        var target = Number(dot.getAttribute('data-step-dot'));
+        if (target < step || currentStepIsValid()) {
+          updateStep(target);
+        }
+      });
+    });
+
+    form.addEventListener('input', updatePreview);
+    form.addEventListener('change', updatePreview);
+    updateStep(1);
+    updatePreview();
+  }
+
+  function updatePreview() {
+    var form = document.querySelector('[data-step-form]');
+    if (!form) return;
+
+    var values = {
+      title: form.querySelector('[data-preview-title]'),
+      price: form.querySelector('[data-preview-price]'),
+      area: form.querySelector('[data-preview-area]'),
+      location: form.querySelector('[data-preview-location]')
+    };
+
+    Object.keys(values).forEach(function (key) {
+      var output = form.querySelector('[data-preview-output="' + key + '"]');
+      if (!output) return;
+      var fallback = {
+        title: 'Tiêu đề tin của bạn',
+        price: 'Giá bán',
+        area: 'Diện tích',
+        location: 'Khu vực'
+      };
+      output.textContent = values[key] && values[key].value ? values[key].value : fallback[key];
+    });
   }
 
   function formatNumber(value) {
@@ -266,7 +355,7 @@
   }
 
   function initRevealAnimation() {
-    var targets = document.querySelectorAll('.al-market, .al-ticker, .al-featured, .al-news, .al-agents, .al-ecosystem, .al-card, .al-agent, .al-tools article');
+    var targets = document.querySelectorAll('.al-market, .al-ticker, .al-featured, .al-news, .al-agents, .al-ecosystem, .al-card, .al-agent, .al-tools article, .al-result-card, .al-filter-panel, .al-submit-form, .al-submit-guide');
 
     targets.forEach(function (target) {
       target.classList.add('al-reveal');
@@ -299,6 +388,7 @@
     initTabs();
     initModals();
     initForms();
+    initSubmitSteps();
     initStats();
     initRevealAnimation();
   });
